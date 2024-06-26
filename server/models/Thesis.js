@@ -3,8 +3,13 @@ import mongoose from "mongoose";
 const ThesisSchema = new mongoose.Schema(
   {
     thesisName: String,
-    studentQuantity: Number,
+    instructor: String,
+    studentQuantity: String,
     require: String,
+    members: {
+      type: Array,
+      default: [],
+    },
   },
   { timestamps: true }
 );

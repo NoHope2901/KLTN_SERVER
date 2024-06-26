@@ -3,17 +3,18 @@ import Thesis from "../models/Thesis.js";
 // create
 export const createThesis = async (req, res) => {
   try {
-    const { thesisName, studentQuantity, require } = req.body;
+    const { thesisName, instructor, studentQuantity, require } = req.body;
 
     const newThesis = new Thesis({
-      thesisName: thesisName,
-      studentQuantity: studentQuantity,
-      require: require,
+      thesisName,
+      instructor,
+      studentQuantity,
+      require,
     });
 
     const savedThesis = await newThesis.save();
 
-    res.status(201).json({ thesisId: savedThesis._id });
+    res.status(201).json({ msg: "created successfully", thesisId: savedThesis._id });
   } catch (error) {
     res.status(409).json({ error: error.message });
   }
@@ -46,14 +47,14 @@ export const getThesisById = async (req, res) => {
 };
 
 // update
-export const updateThesis = async (req, res) => {
+export const teacherUpdate = async (req, res) => {
   try {
     const { id } = req.params;
-    const { thesisName, studentQuantity, require } = req.body;
+    const { thesisName, Instructor, studentQuantity, require } = req.body;
 
     const updatedThesis = await Thesis.findByIdAndUpdate(
       id,
-      { thesisName, studentQuantity, require },
+      { thesisName, Instructor, studentQuantity, require },
       { new: true, runValidators: true } // Trả về tài liệu đã cập nhật và chạy các bộ kiểm tra
     );
 
@@ -61,6 +62,28 @@ export const updateThesis = async (req, res) => {
       return res.status(404).json({ message: "Thesis not found" });
     }
 
+    res.status(200).json(updatedThesis);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+export const studentUpdate = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const memberId = req.user.code;
+
+    const thesis = await Thesis.findById(id);
+    if (!thesis) {
+      return res.status(404).json({ message: "Thesis not found" });
+    }
+
+    if (thesis.members.includes(memberId)) {
+      thesis.members = thesis.members.filter((id) => id != memberId);
+    } else {
+      thesis.members.push(memberId);
+    }
+
+    const updatedThesis = await thesis.save();
     res.status(200).json(updatedThesis);
   } catch (error) {
     res.status(500).json({ error: error.message });

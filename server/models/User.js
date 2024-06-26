@@ -16,6 +16,19 @@ const UserSchema = new mongoose.Schema(
       max: 10,
     },
     role: String,
+    firstName: {
+      type: String,
+      required: true,
+    },
+    lastName: {
+      type: String,
+      required: true,
+    },
+    code: String,
+    dob: String,
+    classCode: String, // vd: TT32H6, TI32G1,...
+    major: String, // ngành học. vd: cntt, trí tuệ nhân tạo...
+    phoneNumber: String,
   },
   { timestamps: true }
 );

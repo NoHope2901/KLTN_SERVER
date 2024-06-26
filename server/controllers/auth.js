@@ -5,20 +5,17 @@ import User from "../models/User.js";
 // Đăng ký
 export const register = async (req, res) => {
   try {
-    const { username, password, role } = req.body;
+    const { username, password, role, firstName, lastName, code, dob, classCode, major, phoneNumber } = req.body;
 
-    // Kiểm tra dữ liệu đầu vào
-    if (!username || !password || !role) {
+    if (!username || !password || !role || !code) {
       return res.status(400).json({ msg: "Please provide all required fields." });
     }
 
-    // Kiểm tra xem người dùng đã tồn tại chưa
     const existingUser = await User.findOne({ username: username });
     if (existingUser) {
       return res.status(400).json({ msg: "Username is already taken." });
     }
 
-    // Băm mật khẩu trước khi lưu
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
 
@@ -26,6 +23,13 @@ export const register = async (req, res) => {
       username,
       password: hashedPassword,
       role,
+      firstName,
+      lastName,
+      code,
+      dob,
+      classCode,
+      major,
+      phoneNumber,
     });
 
     await newUser.save();
@@ -41,7 +45,6 @@ export const login = async (req, res) => {
   try {
     const { username, password } = req.body;
 
-    // Kiểm tra dữ liệu đầu vào
     if (!username || !password) {
       return res.status(400).json({ msg: "Please provide both username and password." });
     }
@@ -55,11 +58,11 @@ export const login = async (req, res) => {
     const payload = {
       id: user._id,
       username: user.username,
+      code: user.code,
       role: user.role,
     };
     const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: "1h" });
 
-    // Chuyển đổi đối tượng Mongoose sang đối tượng JavaScript thuần túy và xóa password
     const userWithoutPassword = user.toObject();
     delete userWithoutPassword.password;
 

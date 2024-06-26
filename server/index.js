@@ -5,6 +5,10 @@ import cors from "cors";
 import dotenv from "dotenv";
 import authRoutes from "./routes/auth.js";
 import thesisRoutes from "./routes/thesis.js";
+import userRoutes from "./routes/user.js";
+import notificationRoutes from "./routes/notification.js";
+import apiRoutes from "./routes/api.js";
+import "./cronJobs/checkDeadlines.js";
 
 dotenv.config();
 const app = express();
@@ -13,8 +17,11 @@ app.use(bodyParser.json({ limit: "30mb", extended: true }));
 app.use(bodyParser.urlencoded({ limit: "30mb", extended: true }));
 app.use(cors());
 // routes
+app.use("/api/theses", apiRoutes);
+app.use("/users", userRoutes);
 app.use("/auth", authRoutes);
 app.use("/theses", thesisRoutes);
+app.use("/notifications", notificationRoutes);
 //MONGOOSE SETUP
 const PORT = process.env.PORT || 6001;
 mongoose
