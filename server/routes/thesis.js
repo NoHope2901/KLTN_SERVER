@@ -3,8 +3,9 @@ import {
   createThesis,
   getAllTheses,
   getThesisById,
+  getRegisteredThesisId,
   teacherUpdate,
-  studentUpdate,
+  updateRegistrationStatus,
   deleteThesis,
 } from "../controllers/thesis.js";
 import { verifyToken } from "../middlewares/auth.js";
@@ -25,16 +26,18 @@ const router = express.Router();
 // // delete
 // router.delete("/:id", verifyToken, checkDeadline, deleteThesis);
 
+//   http://localhost:3001/theses + các route bên dưới
 // create
 router.post("/", verifyToken, createThesis);
 
 // read
 router.get("/", getAllTheses);
-router.get("/:id", getThesisById);
+router.get("/getbyid/:id", getThesisById);
+router.get("/registered", verifyToken, getRegisteredThesisId);
 
 // update
-router.put("tc/:id", teacherUpdate);
-router.put("st/:id", studentUpdate);
+router.put("/update/:id", teacherUpdate);
+router.put("/change/:id", verifyToken, updateRegistrationStatus);
 // delete
 router.delete("/:id", deleteThesis);
 

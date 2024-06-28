@@ -46,15 +46,36 @@ export const getThesisById = async (req, res) => {
   }
 };
 
+export const getRegisteredThesisId = async (req, res) => {
+  try {
+    const memberId = req.user.code;
+
+    // Chờ dữ liệu từ cơ sở dữ liệu
+    const theses = await Thesis.find();
+
+    // Kiểm tra từng luận văn để tìm luận văn mà sinh viên đã đăng ký
+    for (const thesis of theses) {
+      if (thesis.members.includes(memberId)) {
+        return res.status(200).json({ registeredThesisId: thesis._id });
+      }
+    }
+
+    // Nếu không tìm thấy luận văn nào đã đăng ký
+    res.status(200).json({ registeredThesisId: "" });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
 // update
 export const teacherUpdate = async (req, res) => {
   try {
     const { id } = req.params;
-    const { thesisName, Instructor, studentQuantity, require } = req.body;
+    const { thesisName, instructor, studentQuantity, require } = req.body;
 
     const updatedThesis = await Thesis.findByIdAndUpdate(
       id,
-      { thesisName, Instructor, studentQuantity, require },
+      { thesisName, instructor, studentQuantity, require },
       { new: true, runValidators: true } // Trả về tài liệu đã cập nhật và chạy các bộ kiểm tra
     );
 
@@ -67,7 +88,7 @@ export const teacherUpdate = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
-export const studentUpdate = async (req, res) => {
+export const updateRegistrationStatus = async (req, res) => {
   try {
     const { id } = req.params;
     const memberId = req.user.code;

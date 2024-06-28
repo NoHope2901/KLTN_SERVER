@@ -9,6 +9,7 @@ import userRoutes from "./routes/user.js";
 import notificationRoutes from "./routes/notification.js";
 import apiRoutes from "./routes/api.js";
 import "./cronJobs/checkDeadlines.js";
+import morgan from "morgan";
 
 dotenv.config();
 const app = express();
@@ -16,6 +17,7 @@ app.use(express.json());
 app.use(bodyParser.json({ limit: "30mb", extended: true }));
 app.use(bodyParser.urlencoded({ limit: "30mb", extended: true }));
 app.use(cors());
+// app.use(morgan());
 // routes
 app.use("/api/theses", apiRoutes);
 app.use("/users", userRoutes);
