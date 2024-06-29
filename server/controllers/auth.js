@@ -56,11 +56,15 @@ export const login = async (req, res) => {
     if (!isMatch) return res.status(400).json({ msg: "Incorrect password!" });
 
     const payload = {
-      id: user._id,
+      _id: user._id,
       username: user.username,
-      code: user.code,
       role: user.role,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      phoneNumber: user.phoneNumber,
+      code: user.code,
     };
+
     const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: "10h" });
 
     const userWithoutPassword = user.toObject();

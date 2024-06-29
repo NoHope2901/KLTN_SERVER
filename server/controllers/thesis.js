@@ -3,11 +3,13 @@ import Thesis from "../models/Thesis.js";
 // create
 export const createThesis = async (req, res) => {
   try {
-    const { thesisName, instructor, studentQuantity, require } = req.body;
+    const { thesisName, studentQuantity, require } = req.body;
 
     const newThesis = new Thesis({
       thesisName,
-      instructor,
+      instructorCode: req.user.code,
+      instructorName: `${req.user.firstName} ${req.user.lastName}`,
+      instructorPhone: req.user.phoneNumber,
       studentQuantity,
       require,
     });

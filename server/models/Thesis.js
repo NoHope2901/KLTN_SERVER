@@ -3,7 +3,9 @@ import mongoose from "mongoose";
 const ThesisSchema = new mongoose.Schema(
   {
     thesisName: String,
-    instructor: String,
+    instructorCode: String,
+    instructorName: String,
+    instructorPhone: String,
     studentQuantity: String,
     require: String,
     members: {
