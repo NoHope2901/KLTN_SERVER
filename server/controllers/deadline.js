@@ -18,20 +18,33 @@ export const createDeadline = async (req, res) => {
 
     // Create notification for teacher when deadline is created
     if (type === "teacherSubmitTopics") {
+      scheduleNotification(
+        newDeadline,
+        "students",
+        "Đã có danh sách đề tài, sinh viên xem danh sách và lựa chọn đề tài phù hợp trước khi đến hạn đăng ký"
+      );
       const teachers = await User.find({ role: "teacher" });
 
       teachers.forEach(async (teacher) => {
         const newNotification = new Notification({
           userId: teacher._id,
-          message: `A new deadline has been set: ${description}.`,
+
+          message: `${description}.`,
         });
         await newNotification.save();
       });
     }
+    if (type === "studentSubmitTopics") {
+      const students = await User.find({ role: "student" });
 
-    // Schedule notification for students when deadline ends
-    if (type === "teacherSubmitTopics") {
-      scheduleNotification(newDeadline, "students");
+      students.forEach(async (student) => {
+        const newNotification = new Notification({
+          userId: student._id,
+
+          message: `${description}.`,
+        });
+        await newNotification.save();
+      });
     }
 
     res.status(201).json(newDeadline);
@@ -44,6 +57,47 @@ export const getDeadline = async (req, res) => {
   try {
     const deadlines = await Deadline.find();
     res.status(200).json(deadlines);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+export const getTeacherActiveDeadline = async (req, res) => {
+  try {
+    const currentDate = new Date(); // Định nghĩa currentDate để lấy thời gian hiện tại
+
+    const deadline = await Deadline.findOne({
+      type: "teacherSubmitTopics",
+      startDate: { $lte: currentDate },
+      endDate: { $gte: currentDate },
+      isActive: true,
+    });
+
+    if (!deadline) {
+      return res.status(404).json({ message: "Active deadline not found" });
+    }
+
+    res.status(200).json(deadline);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+export const getStudentActiveDeadline = async (req, res) => {
+  try {
+    const currentDate = new Date(); // Định nghĩa currentDate để lấy thời gian hiện tại
+
+    const deadline = await Deadline.findOne({
+      type: "studentSubmitTopics",
+      startDate: { $lte: currentDate },
+      endDate: { $gte: currentDate },
+      isActive: true,
+    });
+
+    if (!deadline) {
+      return res.status(404).json({ message: "Active deadline not found" });
+    }
+
+    res.status(200).json(deadline);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }

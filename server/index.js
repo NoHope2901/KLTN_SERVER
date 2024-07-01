@@ -8,6 +8,7 @@ import thesisRoutes from "./routes/thesis.js";
 import userRoutes from "./routes/user.js";
 import notificationRoutes from "./routes/notification.js";
 import apiRoutes from "./routes/api.js";
+import deadlineRoutes from "./routes/deadline.js";
 import "./cronJobs/checkDeadlines.js";
 import morgan from "morgan";
 
@@ -19,6 +20,7 @@ app.use(bodyParser.urlencoded({ limit: "30mb", extended: true }));
 app.use(cors());
 // app.use(morgan());
 // routes
+app.use("/deadlines", deadlineRoutes);
 app.use("/api/theses", apiRoutes);
 app.use("/users", userRoutes);
 app.use("/auth", authRoutes);

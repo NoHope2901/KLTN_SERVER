@@ -1,6 +1,6 @@
 import Deadline from "../models/Deadline.js";
 
-export const checkDeadline = async (req, res, next) => {
+export const checkTeacherDeadline = async (req, res, next) => {
   try {
     const currentDate = new Date();
     const activeDeadline = await Deadline.find({
@@ -11,7 +11,26 @@ export const checkDeadline = async (req, res, next) => {
     });
 
     if (!activeDeadline) {
-      return res.status(404).json({ message: "The deadline has passed or not started yet." });
+      return res.status(404).json({ message: "Thời hạn đăng ký đã hết hoặc chưa bắt đầu" });
+    }
+
+    next();
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+export const checkStudentDeadline = async (req, res, next) => {
+  try {
+    const currentDate = new Date();
+    const activeDeadline = await Deadline.find({
+      type: "studentSubmitTopics",
+      startDate: { $lte: currentDate },
+      endDate: { $gte: currentDate },
+      isActive: true,
+    });
+
+    if (!activeDeadline) {
+      return res.status(404).json({ message: "Thời hạn đăng ký đã hết hoặc chưa bắt đầu" });
     }
 
     next();

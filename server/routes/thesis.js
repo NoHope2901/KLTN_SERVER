@@ -9,7 +9,7 @@ import {
   deleteThesis,
 } from "../controllers/thesis.js";
 import { verifyToken } from "../middlewares/auth.js";
-import { checkDeadline } from "../middlewares/checkDeadline.js";
+import { checkTeacherDeadline, checkStudentDeadline } from "../middlewares/checkDeadline.js";
 
 const router = express.Router();
 
@@ -28,17 +28,17 @@ const router = express.Router();
 
 //   http://localhost:3001/theses + các route bên dưới
 // create
-router.post("/", verifyToken, createThesis);
+router.post("/", verifyToken, checkTeacherDeadline, createThesis);
 
 // read
-router.get("/", getAllTheses);
-router.get("/getbyid/:id", getThesisById);
+router.get("/", verifyToken, getAllTheses);
+router.get("/getbyid/:id", verifyToken, getThesisById);
 router.get("/registered", verifyToken, getRegisteredThesisId);
 
 // update
-router.put("/update/:id", teacherUpdate);
-router.put("/change/:id", verifyToken, updateRegistrationStatus);
+router.put("/update/:id", verifyToken, checkTeacherDeadline, teacherUpdate);
+router.put("/change/:id", verifyToken, checkStudentDeadline, updateRegistrationStatus);
 // delete
-router.delete("/:id", deleteThesis);
+router.delete("/:id", verifyToken, checkTeacherDeadline, deleteThesis);
 
 export default router;
