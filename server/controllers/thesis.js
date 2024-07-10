@@ -1,13 +1,16 @@
 import Thesis from "../models/Thesis.js";
 import User from "../models/User.js";
 import Notification from "../models/Notification.js";
+import StudentStatus from "../models/StudentStatus.js";
 // create
 export const createThesis = async (req, res) => {
   try {
-    const { thesisName, studentQuantity, require } = req.body;
+    const { semester, year, thesisName, studentQuantity, require } = req.body;
     const { code, firstName, lastName } = req.user;
 
     const newThesis = new Thesis({
+      semester,
+      year,
       thesisName,
       instructorCode: req.user.code,
       instructorName: `${req.user.firstName} ${req.user.lastName}`,
@@ -124,8 +127,10 @@ export const updateRegistrationStatus = async (req, res) => {
 
     if (thesis.members.includes(memberId)) {
       thesis.members = thesis.members.filter((id) => id != memberId);
+      deleteStStatus(memberId);
     } else {
       thesis.members.push(memberId);
+      createStStatus(memberId);
     }
 
     const updatedThesis = await thesis.save();
@@ -133,6 +138,19 @@ export const updateRegistrationStatus = async (req, res) => {
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
+};
+const deleteStStatus = async (code) => {
+  try {
+    await StudentStatus.delete({ studentCode: code });
+  } catch (error) {}
+};
+const createStStatus = async (code) => {
+  try {
+    const newStatus = new StudentStatus({
+      studentCode: code,
+    });
+    await newStatus.save();
+  } catch (error) {}
 };
 
 // delete

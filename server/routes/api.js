@@ -4,6 +4,6 @@ import { getDataByThesis } from "../controllers/api.js";
 
 const router = express.Router();
 
-router.get("/", verifyToken, getDataByThesis);
+router.get("/", getDataByThesis);
 
 export default router;

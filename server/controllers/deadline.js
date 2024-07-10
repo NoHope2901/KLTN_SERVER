@@ -29,7 +29,7 @@ export const createDeadline = async (req, res) => {
         const newNotification = new Notification({
           userId: teacher._id,
 
-          message: `${description}.`,
+          message: `Bạn có một deadline mới: ${description}. Thời hạn cuối: ${endDate}`,
         });
         await newNotification.save();
       });
@@ -41,7 +41,7 @@ export const createDeadline = async (req, res) => {
         const newNotification = new Notification({
           userId: student._id,
 
-          message: `${description}.`,
+          message: `Bạn có một deadline mới: ${description}. Thời hạn cuối: ${endDate}`,
         });
         await newNotification.save();
       });
@@ -55,8 +55,35 @@ export const createDeadline = async (req, res) => {
 
 export const getDeadline = async (req, res) => {
   try {
-    const deadlines = await Deadline.find();
-    res.status(200).json(deadlines);
+    const { role } = req.user;
+    const currentDate = new Date(); // Định nghĩa currentDate để lấy thời gian hiện tại
+
+    if (role === "teacher") {
+      const deadline = await Deadline.findOne({
+        type: "teacherSubmitTopics",
+        startDate: { $lte: currentDate },
+        endDate: { $gte: currentDate },
+        isActive: true,
+      });
+      if (!deadline) {
+        return res.status(404).json({ message: "Active deadline not found" });
+      }
+
+      res.status(200).json(deadline);
+    }
+    if (role === "student") {
+      const deadline = await Deadline.findOne({
+        type: "studentSubmitTopics",
+        startDate: { $lte: currentDate },
+        endDate: { $gte: currentDate },
+        isActive: true,
+      });
+      if (!deadline) {
+        return res.status(404).json({ message: "Active deadline not found" });
+      }
+
+      res.status(200).json(deadline);
+    }
   } catch (error) {
     res.status(500).json({ error: error.message });
   }

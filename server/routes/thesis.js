@@ -13,19 +13,6 @@ import { checkTeacherDeadline, checkStudentDeadline } from "../middlewares/check
 
 const router = express.Router();
 
-// // create
-// router.post("/", verifyToken,checkDeadline, createThesis);
-
-// // read
-// router.get("/", verifyToken, getAllTheses);
-// router.get("/:id", verifyToken, getThesisById);
-
-// // update
-// router.put("tc/:id", verifyToken, checkDeadline, teacherUpdate);
-// router.put("st/:id", verifyToken, checkDeadline, studentUpdate);
-// // delete
-// router.delete("/:id", verifyToken, checkDeadline, deleteThesis);
-
 //   http://localhost:3001/theses + các route bên dưới
 // create
 router.post("/", verifyToken, checkTeacherDeadline, createThesis);

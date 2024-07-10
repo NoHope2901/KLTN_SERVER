@@ -2,6 +2,8 @@ import mongoose from "mongoose";
 
 const ThesisSchema = new mongoose.Schema(
   {
+    semester: String,
+    year: String,
     thesisName: String,
     instructorCode: String,
     instructorName: String,

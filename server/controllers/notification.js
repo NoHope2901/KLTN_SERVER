@@ -27,10 +27,7 @@ export const deleteAllNotification = async (req, res) => {
       isRead: true,
     });
 
-    res.status(200).json({
-      message: "All read notifications deleted successfully",
-      deletedCount: result.deletedCount,
-    });
+    res.status(200).json(result);
   } catch (error) {
     console.error("Failed to delete notifications", error);
     res.status(500).json({ error: "Internal Server Error" });

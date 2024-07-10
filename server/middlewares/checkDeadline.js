@@ -10,8 +10,8 @@ export const checkTeacherDeadline = async (req, res, next) => {
       isActive: true,
     });
 
-    if (!activeDeadline) {
-      return res.status(404).json({ message: "Thời hạn đăng ký đã hết hoặc chưa bắt đầu" });
+    if (activeDeadline.length === 0) {
+      return res.status(404).json("Thời hạn đăng ký đã hết hoặc chưa bắt đầu");
     }
 
     next();
@@ -29,8 +29,8 @@ export const checkStudentDeadline = async (req, res, next) => {
       isActive: true,
     });
 
-    if (!activeDeadline) {
-      return res.status(404).json({ message: "Thời hạn đăng ký đã hết hoặc chưa bắt đầu" });
+    if (activeDeadline.length === 0) {
+      return res.status(404).json("Thời hạn đăng ký đã hết hoặc chưa bắt đầu");
     }
 
     next();
