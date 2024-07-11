@@ -62,6 +62,15 @@ export const getThesisById = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+export const getThesisByTeacherCode = async (req, res) => {
+  try {
+    const { code } = req.user;
+    const theses = await Thesis.find({ instructorCode: code });
+    res.status(200).json(theses);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
 
 export const getRegisteredThesisId = async (req, res) => {
   try {
@@ -178,5 +187,25 @@ export const deleteThesis = async (req, res) => {
     res.status(200).json({ message: "Thesis deleted successfully" });
   } catch (error) {
     res.status(500).json({ error: error.message });
+  }
+};
+export const deleteMember = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { deleteCode } = req.body;
+
+    const thesis = await Thesis.findById(id);
+    if (!thesis) {
+      console.log("khong co thesis");
+      return res.status(404).json({ message: "Thesis not found" });
+    }
+
+    thesis.members = thesis.members.filter((id) => id != deleteCode);
+
+    await thesis.save();
+
+    res.status(200);
+  } catch (error) {
+    res.status(500);
   }
 };
