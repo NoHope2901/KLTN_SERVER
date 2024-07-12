@@ -66,7 +66,7 @@ export const getDeadline = async (req, res) => {
         isActive: true,
       });
       if (!deadline) {
-        return res.status(404).json({ message: "Active deadline not found" });
+        return res.json({ message: "Active deadline not found" });
       }
 
       res.status(200).json(deadline);
@@ -100,7 +100,7 @@ export const getTeacherActiveDeadline = async (req, res) => {
     });
 
     if (!deadline) {
-      return res.status(404).json({ message: "Active deadline not found" });
+      return res.json({ message: "Active deadline not found" });
     }
 
     res.status(200).json(deadline);
@@ -121,7 +121,7 @@ export const getStudentActiveDeadline = async (req, res) => {
     });
 
     if (!deadline) {
-      return res.status(404).json({ message: "Active deadline not found" });
+      return res.json({ message: "Active deadline not found" });
     }
 
     res.status(200).json(deadline);

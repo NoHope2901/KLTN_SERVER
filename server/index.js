@@ -13,6 +13,7 @@ import statusRoutes from "./routes/studentstatus.js";
 import "./cronJobs/checkDeadlines.js";
 import morgan from "morgan";
 
+import path from "path";
 dotenv.config();
 const app = express();
 app.use(express.json());
@@ -20,7 +21,12 @@ app.use(bodyParser.json({ limit: "30mb", extended: true }));
 app.use(bodyParser.urlencoded({ limit: "30mb", extended: true }));
 app.use(cors());
 // app.use(morgan());
-// routes
+
+// Static folder
+// app.use("/uploads", express.static(path.join(__dirname, "uploads")));
+
+// Routes
+
 app.use("/deadlines", deadlineRoutes);
 app.use("/status", statusRoutes);
 app.use("/api", apiRoutes);
