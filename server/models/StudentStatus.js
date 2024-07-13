@@ -13,6 +13,14 @@ const studentStatusSchema = new mongoose.Schema(
       type: String,
       default: "Không",
     },
+    secretary: {
+      type: String,
+      default: "Không",
+    },
+    commissioner: {
+      type: String,
+      default: "Không",
+    },
     date: {
       type: String,
       default: "Không",

@@ -44,6 +44,8 @@ export const getDataByThesis = async (req, res) => {
           gvhd: thesis.instructorName,
           ct: studentStatus.president,
           pb: studentStatus.counterArgument,
+          tk: studentStatus.secretary,
+          uv: studentStatus.commissioner,
           ng: studentStatus.date,
           d: studentStatus.score,
           gh: studentStatus.extend,

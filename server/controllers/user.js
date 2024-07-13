@@ -9,6 +9,14 @@ export const getUsers = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+export const getTeachers = async (req, res) => {
+  try {
+    const teachers = await User.find({ role: "teacher" });
+    res.status(200).json(teachers);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
 // update
 export const updateUser = async (req, res) => {
   try {
