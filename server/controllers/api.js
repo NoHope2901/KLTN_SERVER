@@ -50,6 +50,7 @@ export const getDataByThesis = async (req, res) => {
           d: studentStatus.score,
           gh: studentStatus.extend,
           tt: studentStatus.protectStatus,
+          alp: studentStatus.allowProtect,
         };
       });
 

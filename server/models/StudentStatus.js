@@ -37,6 +37,10 @@ const studentStatusSchema = new mongoose.Schema(
       type: String,
       default: "Chưa bảo vệ",
     },
+    allowProtect: {
+      type: String,
+      default: "Có",
+    },
   },
   { timestamps: true }
 );

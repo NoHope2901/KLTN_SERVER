@@ -46,3 +46,28 @@ export const deleteStudentStatus = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+
+export const getStudentStatusByCouncilName = async (req, res) => {
+  try {
+    const { firstName, lastName } = req.user;
+    const name = `${firstName} ${lastName}`;
+    if (!name) {
+      return res.status(400).json({ error: "Name is required" });
+    }
+
+    // Tạo truy vấn động để tìm kiếm trong nhiều trường
+    const query = {
+      $or: [{ president: name }, { secretary: name }, { counterArgument: name }, { commissioner: name }],
+    };
+
+    const councils = await StudentStatus.find(query);
+
+    if (councils.length === 0) {
+      return res.status(404).json({ message: "No records found with the given name" });
+    }
+
+    res.status(200).json(councils);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
