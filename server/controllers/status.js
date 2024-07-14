@@ -31,4 +31,18 @@ export const updateCouncil = async (req, res) => {
   }
 };
 
-// const updateStatus
+// delete
+export const deleteStudentStatus = async (req, res) => {
+  try {
+    const { studentCode } = req.body;
+    const deletedStatus = await StudentStatus.findOneAndDelete({ studentCode: studentCode });
+
+    if (!deletedStatus) {
+      return res.status(404).json("student status not found");
+    }
+
+    res.status(200).json("Delete successful");
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
