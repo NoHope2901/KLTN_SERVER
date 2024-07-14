@@ -13,8 +13,8 @@ export const getStudentStatus = async (req, res) => {
 // update
 export const updateCouncil = async (req, res) => {
   try {
-    const { studentCode, role, updateName } = req.body;
-    // console.log(studentCode, role, updateName);
+    const { studentCode, field, updateName } = req.body;
+    // console.log(studentCode, field, updateName);
 
     const updateStudentStatus = await StudentStatus.findOne({ studentCode: studentCode });
 
@@ -22,7 +22,7 @@ export const updateCouncil = async (req, res) => {
       return res.status(404).json("student status not found");
     }
 
-    updateStudentStatus[role] = updateName;
+    updateStudentStatus[field] = updateName;
     await updateStudentStatus.save();
 
     res.status(200).json("Update successful");
