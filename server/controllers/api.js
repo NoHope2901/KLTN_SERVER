@@ -6,6 +6,7 @@ import StudentStatus from "../models/StudentStatus.js";
 
 export const getDataByThesis = async (req, res) => {
   try {
+    // console.log("goi vao api");
     const data = [];
     const theses = await Thesis.find().lean();
 

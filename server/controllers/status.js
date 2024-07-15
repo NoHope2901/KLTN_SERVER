@@ -30,6 +30,27 @@ export const updateCouncil = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+export const updateDocument = async (req, res) => {
+  try {
+    const { linkDrive, linkGithub } = req.body;
+    const { code } = req.user;
+    // console.log(studentCode, field, updateName);
+
+    const updateStudentStatus = await StudentStatus.findOne({ studentCode: code });
+
+    if (!updateStudentStatus) {
+      return res.status(404).json("student status not found");
+    }
+
+    updateStudentStatus.linkDrive = linkDrive;
+    updateStudentStatus.linkGithub = linkGithub;
+    await updateStudentStatus.save();
+
+    res.status(200).json("Update successful");
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
 
 // delete
 export const deleteStudentStatus = async (req, res) => {

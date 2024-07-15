@@ -25,6 +25,14 @@ const studentStatusSchema = new mongoose.Schema(
       type: String,
       default: "Không",
     },
+    linkDrive: {
+      type: String,
+      default: "Không",
+    },
+    linkGithub: {
+      type: String,
+      default: "Không",
+    },
     score: {
       type: String,
       default: "0",
