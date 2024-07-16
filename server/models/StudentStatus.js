@@ -5,6 +5,9 @@ const studentStatusSchema = new mongoose.Schema(
     studentCode: {
       type: String,
     },
+    instructor: {
+      type: String,
+    },
     president: {
       type: String,
       default: "Không",

@@ -139,7 +139,7 @@ export const updateRegistrationStatus = async (req, res) => {
       deleteStStatus(memberId);
     } else {
       thesis.members.push(memberId);
-      createStStatus(memberId);
+      createStStatus(memberId, thesis.instructorName);
     }
 
     const updatedThesis = await thesis.save();
@@ -148,15 +148,20 @@ export const updateRegistrationStatus = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+
 const deleteStStatus = async (code) => {
   try {
-    await StudentStatus.delete({ studentCode: code });
-  } catch (error) {}
+    await StudentStatus.deleteOne({ studentCode: code });
+  } catch (error) {
+    console.error("Lỗi khi xóa trạng thái sinh viên:", error);
+  }
 };
-const createStStatus = async (code) => {
+
+const createStStatus = async (code, instructor) => {
   try {
     const newStatus = new StudentStatus({
       studentCode: code,
+      instructor,
     });
     await newStatus.save();
   } catch (error) {}
@@ -165,6 +170,7 @@ const createStStatus = async (code) => {
 // delete
 export const deleteThesis = async (req, res) => {
   try {
+    console.log("goi toi xoa");
     const { id } = req.params;
     const { code, firstName, lastName } = req.user;
 
@@ -173,6 +179,8 @@ export const deleteThesis = async (req, res) => {
     if (!deletedThesis) {
       return res.status(404).json({ message: "Thesis not found" });
     }
+    console.log(deletedThesis.members);
+    deletedThesis.members.forEach((memberId) => deleteStStatus(memberId));
 
     const users = await User.find();
 
@@ -189,6 +197,7 @@ export const deleteThesis = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+
 export const deleteMember = async (req, res) => {
   try {
     const { id } = req.params;

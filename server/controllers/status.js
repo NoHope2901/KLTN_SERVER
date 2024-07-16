@@ -78,7 +78,13 @@ export const getStudentStatusByCouncilName = async (req, res) => {
 
     // Tạo truy vấn động để tìm kiếm trong nhiều trường
     const query = {
-      $or: [{ president: name }, { secretary: name }, { counterArgument: name }, { commissioner: name }],
+      $or: [
+        { president: name },
+        { instructor: name },
+        { secretary: name },
+        { counterArgument: name },
+        { commissioner: name },
+      ],
     };
 
     const councils = await StudentStatus.find(query);
